@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAI-DEFENSE: Phishing Detection Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 70%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #333;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .section {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .input-field {
+            padding: 8px;
+            width: 90%;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin: 5px;
+            background: #f8f9fa;
+        }
+        .tab.active {
+            background: #007BFF;
+            color: white;
+        }
+        .answer-box, .prediction-box {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: bold;
+            border: 2px solid #333;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>GAI-DEFENSE: Phishing Detection Dashboard</h2>
+
+        <div class="section">
+            <h3>Upload the Phishing Dataset:</h3>
+            <input type="file" id="fileUpload">
+            <button class="btn" onclick="uploadFile()">Upload</button>
+            <p id="uploadStatus"></p>
+        </div>
+
+        <div class="section">
+            <h3>Select the Models:</h3>
+            <label><input type="checkbox" name="model" value="ALBERT"> ALBERT</label>
+            <label><input type="checkbox" name="model" value="DistilBERT"> DistilBERT</label>
+            <label><input type="checkbox" name="model" value="MobileBERT"> MobileBERT</label>
+            <label><input type="checkbox" name="model" value="TinyBERT"> TinyBERT</label>
+            <label><input type="checkbox" name="model" value="ELECTRA"> ELECTRA</label>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('dataAnalysis')">Data Analysis</div>
+            <div class="tab" onclick="showTab('phishingDetection')">Phishing Attack Detection</div>
+        </div>
+
+        <div id="dataAnalysis" class="section">
+            <h3>Ask a Question:</h3>
+            <select id="questionDropdown" class="input-field">
+                <option>How many rows are in this dataset?</option>
+                <option>What are the top phishing indicators in this dataset?</option>
+            </select>
+            <button class="btn" onclick="askAI()">Ask AI</button>
+            <div id="answerBox" class="answer-box hidden"></div>
+        </div>
+
+        <div id="phishingDetection" class="section hidden">
+            <h3>Enter Feature Values for Prediction:</h3>
+            <input type="text" class="input-field" id="filename" placeholder="FILENAME">
+            <input type="text" class="input-field" id="url" placeholder="URL">
+            <input type="number" class="input-field" id="urllength" placeholder="URL Length">
+            <input type="text" class="input-field" id="domain" placeholder="Domain">
+            <input type="number" class="input-field" id="domainlength" placeholder="Domain Length">
+            <button class="btn" onclick="predictPhishing()">Predict</button>
+            <div id="predictionResult" class="answer-box hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById("fileUpload").files[0];
+            var formData = new FormData();
+            formData.append("file", fileInput);
+
+            $.ajax({
+                url: "/upload",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $("#uploadStatus").text(response.message).css("color", "green");
+                },
+                error: function() {
+                    $("#uploadStatus").text("Error uploading file.").css("color", "red");
+                }
+            });
+        }
+
+        function askAI() {
+            var question = $("#questionDropdown").val();
+
+            $.ajax({
+                url: "/ask",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ question: question }),
+                success: function(response) {
+                    $("#answerBox").html("<strong>Answer:</strong> " + response.answer).removeClass("hidden");
+                }
+            });
+        }
+
+        function predictPhishing() {
+            var data = {
+                "FILENAME": $("#filename").val(),
+                "URL": $("#url").val(),
+                "URLLength": $("#urllength").val(),
+                "Domain": $("#domain").val(),
+                "DomainLength": $("#domainlength").val()
+            };
+
+            $.ajax({
+                url: "/predict",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(response) {
+                    $("#predictionResult").html("<strong>Prediction:</strong> " + response.prediction).removeClass("hidden");
+                }
+            });
+        }
+
+        function showTab(tabName) {
+            $(".section").addClass("hidden");
+            $("#" + tabName).removeClass("hidden");
+            $(".tab").removeClass("active");
+            $(".tab:contains('" + tabName.split(/(?=[A-Z])/).join(" ") + "')").addClass("active");
+        }
+    </script>
+
+</body>
+</html>

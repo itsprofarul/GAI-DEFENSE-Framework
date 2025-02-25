@@ -1,0 +1,10 @@
+﻿FILENAME,URL,URLLength,Domain,DomainLength,IsDomainIP,TLD,URLSimilarityIndex,CharContinuationRate,TLDLegitimateProb,URLCharProb,TLDLength,NoOfSubDomain,HasObfuscation,NoOfObfuscatedChar,ObfuscationRatio,NoOfLettersInURL,label
+521848.txt,https://www.southbankmosaics.com,31,www.southbankmosaics.com,24,0,com,100,1,0.5229071,0.061933179,3,1,0,0,0,18,1
+31372.txt,https://www.uni-mainz.de,23,www.uni-mainz.de,16,0,de,100,0.666666667,0.0326503,0.050207214,2,1,0,0,0,9,1
+597387.txt,https://www.voicefmradio.co.uk,29,www.voicefmradio.co.uk,22,0,uk,100,0.866666667,0.028555,0.06412872,2,2,0,0,0,15,1
+554095.txt,https://www.sfnmjournal.com,26,www.sfnmjournal.com,19,0,com,100,1,0.5229071,0.057605756,3,1,0,0,0,13,1
+151578.txt,https://www.rewildingargentina.org,33,www.rewildingargentina.org,26,0,org,100,1,0.0799628,0.059441389,3,1,0,0,0,20,1
+23107.txt,https://www.globalreporting.org,30,www.globalreporting.org,23,0,org,100,1,0.0799628,0.060614474,3,1,0,0,0,17,1
+23034.txt,https://www.saffronart.com,25,www.saffronart.com,18,0,com,100,1,0.5229071,0.063549404,3,1,0,0,0,12,1
+696732.txt,https://www.nerdscandy.com,25,www.nerdscandy.com,18,0,com,100,1,0.5229071,0.0604856,3,1,0,0,0,12,1
+739255.txt,https://www.hyderabadonline.in,29,www.hyderabadonline.in,22,0,in,100,1,0.0050842,0.056980442,2,1,0,0,0,16,1
